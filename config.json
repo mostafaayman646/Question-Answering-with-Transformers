@@ -10,5 +10,6 @@
     "n_best": 20,
     "max_answer_length": 30,
     "lr": 2e-5,
-    "epochs":2
+    "epochs":2,
+    "seed_val": 42
 }
