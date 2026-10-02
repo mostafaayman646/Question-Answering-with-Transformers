@@ -1,0 +1,9 @@
+{
+    "Train_Path": "data/train-v2.0.json",
+    "Val_Path": "data/dev-v2.0.json",
+    "tokenizer_max_length": 512,
+    "tokenizer_stride": 128,
+    "BATCH_SIZE": 2,
+    "trained_checkpoint": "distilbert-base-uncased",
+    "device": "cuda"
+}

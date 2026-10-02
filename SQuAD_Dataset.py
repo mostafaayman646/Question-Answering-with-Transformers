@@ -1,9 +1,12 @@
 import torch
+import json
 from datasets import Dataset as HFDataset
 from torch.utils.data import Dataset as TDataset
 from data_preprocess import load_data,train_data_preprocess,preprocess_validation_examples
 from transformers import AutoTokenizer
-trained_checkpoint = "distilbert-base-uncased"
+with open("config.json") as file:
+        conf = json.load(file)
+trained_checkpoint = conf["trained_checkpoint"]
 tokenizer = AutoTokenizer.from_pretrained(trained_checkpoint)
 
 class SQuAD(TDataset):

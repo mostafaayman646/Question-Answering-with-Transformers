@@ -1,14 +1,18 @@
 from transformers import default_data_collator
 from torch.utils.data import DataLoader
-
+import json
 from SQuAD_Dataset import SQuAD
 
-############################################1. Creating Dataset class ##########################################################
-Train_Path = "data/train-v2.0.json"
-Train_Dataset = SQuAD(mode="train",Data_Path=Train_Path,tokenizer_max_length=512,tokenizer_stride=128)
+########################################################1. Config ##############################################################
+with open("config.json") as file:
+        conf = json.load(file)
 
-Val_Path = "data/dev-v2.0.json"
-Val_Dataset = SQuAD(mode="val",Data_Path=Val_Path,tokenizer_max_length=512,tokenizer_stride=128)
+############################################1. Creating Dataset class ##########################################################
+Train_Path = conf["Train_Path"]
+Train_Dataset = SQuAD(mode="train",Data_Path=Train_Path,tokenizer_max_length=conf["tokenizer_max_length"],tokenizer_stride=conf["tokenizer_stride"])
+
+Val_Path = conf["Val_Path"]
+Val_Dataset = SQuAD(mode="val",Data_Path=Val_Path,tokenizer_max_length=conf["tokenizer_max_length"],tokenizer_stride=conf["tokenizer_stride"])
 
 for i,d in enumerate(Train_Dataset):
     for k in d.keys():
@@ -27,9 +31,9 @@ for i,d in enumerate(Val_Dataset):
     
     if i == 3:
         break
-################################################################################################################################
+
 ######################################################2. DataLoader ############################################################
-BATCH_SIZE = 2
+BATCH_SIZE = conf["BATCH_SIZE"]
 train_dataloader = DataLoader(
     Train_Dataset,
     shuffle=True,
