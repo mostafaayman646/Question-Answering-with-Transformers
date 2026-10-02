@@ -1,4 +1,5 @@
-from transformers import default_data_collator,DistilBertForQuestionAnswering, AdamW
+from transformers import default_data_collator,DistilBertForQuestionAnswering
+from torch.optim import AdamW
 import torch
 from torch.utils.data import DataLoader
 import json
