@@ -6,7 +6,7 @@ from data_preprocess import load_data,train_data_preprocess,preprocess_validatio
 from transformers import AutoTokenizer
 with open("config.json") as file:
         conf = json.load(file)
-trained_checkpoint = conf["trained_checkpoint"]
+trained_checkpoint = conf["checkpoint"]
 tokenizer = AutoTokenizer.from_pretrained(trained_checkpoint)
 
 class SQuAD(TDataset):
@@ -14,13 +14,13 @@ class SQuAD(TDataset):
         self.mode = mode
         if self.mode == "train":
             df = load_data(Data_Path)
-            sample = HFDataset.from_pandas(df)
+            self.sample = HFDataset.from_pandas(df)
             print("Before tokenization length")
-            print(len(sample))
-            self.dataset = sample.map(
+            print(len(self.sample))
+            self.dataset = self.sample.map(
                 train_data_preprocess,
                 batched=True,
-                remove_columns=sample.column_names,
+                remove_columns=self.sample.column_names,
                 fn_kwargs={"tokenizer": tokenizer,"tokenizer_max_length": tokenizer_max_length, "tokenizer_stride":tokenizer_stride}
             )
             print("After tokenization length")
@@ -28,13 +28,13 @@ class SQuAD(TDataset):
         
         elif self.mode == "val":
             df = load_data(Data_Path)
-            sample = HFDataset.from_pandas(df)
+            self.sample = HFDataset.from_pandas(df)
             print("Before tokenization length")
-            print(len(sample))
-            self.dataset = sample.map(
+            print(len(self.sample))
+            self.dataset = self.sample.map(
                 preprocess_validation_examples,
                 batched=True,
-                remove_columns=sample.column_names,
+                remove_columns=self.sample.column_names,
                 fn_kwargs={"tokenizer": tokenizer,"tokenizer_max_length": tokenizer_max_length, "tokenizer_stride":tokenizer_stride}
             )
             print("After tokenization length")

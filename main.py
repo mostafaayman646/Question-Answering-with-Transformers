@@ -1,7 +1,10 @@
-from transformers import default_data_collator
+from transformers import default_data_collator,DistilBertForQuestionAnswering, AdamW
+import torch
 from torch.utils.data import DataLoader
 import json
 from SQuAD_Dataset import SQuAD
+from trainer import train
+from utils import dev
 
 ########################################################1. Config ##############################################################
 with open("config.json") as file:
@@ -58,3 +61,17 @@ for batch in eval_dataloader:
     print(batch['input_ids'].shape)
     print(batch['attention_mask'].shape)
     break
+
+######################################################3. Train #################################################################
+device = dev(conf["device"])
+print(f'Available device: {device}')
+model = DistilBertForQuestionAnswering.from_pretrained(conf["checkpoint"])
+model = model.to(device)
+optimizer = AdamW(model.parameters(), lr=conf["lr"])
+train(device=device,model=model,optimizer=optimizer,seed_val=conf["seed_val"],train_dataloader=train_dataloader,
+        eval_dataloader=eval_dataloader,val_processed = Val_Dataset.dataset,val = Val_Dataset.sample,
+        epochs = conf["epochs"])
+
+######################################################4. Save Model ############################################################
+model_save_path = 'fine_tuned_model.pt'
+torch.save(model.state_dict(), model_save_path)
