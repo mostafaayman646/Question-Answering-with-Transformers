@@ -11,5 +11,6 @@
     "max_answer_length": 30,
     "lr": 2e-5,
     "epochs":2,
-    "seed_val": 42
+    "seed_val": 42,
+    "model_path": "models/bert_model.pt"
 }

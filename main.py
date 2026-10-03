@@ -74,5 +74,5 @@ train(device=device,model=model,optimizer=optimizer,seed_val=conf["seed_val"],tr
         epochs = conf["epochs"])
 
 ######################################################4. Save Model ############################################################
-model_save_path = 'fine_tuned_model.pt'
+model_save_path = conf["model_path"]
 torch.save(model.state_dict(), model_save_path)
